@@ -83,18 +83,21 @@ fi
 echo "Restoring priv_validator_state.json..."
 mv $DAEMON_HOME/priv_validator_state.json.backup $DAEMON_HOME/data/priv_validator_state.json
 
-# Ask if the user wants to start the services again
+# If services were stopped at the beginning, automatically restart them
 if [[ "$stop_services" == "yes" ]]; then
-    # Ask if the user wants to restart the services
-    read -p "Do you want to restart your Story and Geth services? (yes/no): " restart_services
-    if [[ "$restart_services" == "yes" ]]; then
+    echo "Starting services $story_service_name and $geth_service_name..."
+    sudo systemctl start $story_service_name
+    sudo systemctl start $geth_service_name
+    echo -e "${GREEN}Snapshot download and service restart completed!${NC}"
+else
+    # If services were not stopped, ask if the user wants to start them now
+    read -p "Do you want to start your Story and Geth services now? (yes/no): " start_services
+    if [[ "$start_services" == "yes" ]]; then
         echo "Starting services $story_service_name and $geth_service_name..."
         sudo systemctl start $story_service_name
         sudo systemctl start $geth_service_name
-        echo -e "${GREEN}Snapshot download and service restart completed!${NC}"
+        echo -e "${GREEN}Snapshot download and service start completed!${NC}"
     else
-        echo -e "${GREEN}Snapshot download completed. You can now manually start your services.${NC}"
+        echo -e "${GREEN}Snapshot download completed. You can now start your services manually.${NC}"
     fi
-else
-    echo -e "${GREEN}Snapshot download completed. You can now start your services.${NC}"
 fi
