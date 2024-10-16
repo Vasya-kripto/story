@@ -20,12 +20,11 @@ else
 fi
 
 # Ask if the user wants to stop the services
-echo -e "${GREEN}Do you need to stop your Story and Geth services? (yes/no)${NC}"
-echo -e "Answer 'no' if your services are already stopped and you just want to download the snapshot."
-read -p "Do you need to stop your Story and Geth services? (yes/no): " stop_services
+echo -e "${GREEN}Do you want to stop your Story and Geth services before downloading the snapshot?${NC}"
+read -p "Answer yes to stop the services or no if they are already stopped: " stop_services
 
+# Define service names if stopping services
 if [[ "$stop_services" == "yes" ]]; then
-    # Define service names
     echo -e "${GREEN}By default, the services are named 'story' and 'geth'.${NC}"
     echo "If this is correct, press Enter. Otherwise, please input your custom service names."
 
@@ -83,21 +82,13 @@ fi
 echo "Restoring priv_validator_state.json..."
 mv $DAEMON_HOME/priv_validator_state.json.backup $DAEMON_HOME/data/priv_validator_state.json
 
-# If services were stopped at the beginning, automatically restart them
+# Start the services if they were stopped earlier
 if [[ "$stop_services" == "yes" ]]; then
     echo "Starting services $story_service_name and $geth_service_name..."
     sudo systemctl start $story_service_name
     sudo systemctl start $geth_service_name
-    echo -e "${GREEN}Snapshot download and service restart completed!${NC}"
 else
-    # If services were not stopped, ask if the user wants to start them now
-    read -p "Do you want to start your Story and Geth services now? (yes/no): " start_services
-    if [[ "$start_services" == "yes" ]]; then
-        echo "Starting services $story_service_name and $geth_service_name..."
-        sudo systemctl start $story_service_name
-        sudo systemctl start $geth_service_name
-        echo -e "${GREEN}Snapshot download and service start completed!${NC}"
-    else
-        echo -e "${GREEN}Snapshot download completed. You can now start your services manually.${NC}"
-    fi
+    echo -e "${GREEN}Snapshots downloaded! Please start your services manually when ready.${NC}"
 fi
+
+echo -e "${GREEN}Snapshot download and service handling completed!${NC}"
