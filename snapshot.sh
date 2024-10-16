@@ -19,9 +19,10 @@ else
     GETH_HOME="/home/$USER_NAME/.story/geth/iliad/geth"
 fi
 
-# Ask if the user wants to stop services
-echo -e "${GREEN}Do you need to stop your Story and Geth services?${NC}"
-read -p "(yes/no): " stop_services
+# Ask if the user wants to stop the services
+echo -e "${GREEN}Do you need to stop your Story and Geth services? (yes/no)${NC}"
+echo -e "Answer 'no' if your services are already stopped and you just want to download the snapshot."
+read -p "Do you need to stop your Story and Geth services? (yes/no): " stop_services
 
 if [[ "$stop_services" == "yes" ]]; then
     # Define service names
@@ -82,11 +83,18 @@ fi
 echo "Restoring priv_validator_state.json..."
 mv $DAEMON_HOME/priv_validator_state.json.backup $DAEMON_HOME/data/priv_validator_state.json
 
-# Start the services if they were stopped
+# Ask if the user wants to start the services again
 if [[ "$stop_services" == "yes" ]]; then
-    echo "Starting services $story_service_name and $geth_service_name..."
-    sudo systemctl start $story_service_name
-    sudo systemctl start $geth_service_name
+    # Ask if the user wants to restart the services
+    read -p "Do you want to restart your Story and Geth services? (yes/no): " restart_services
+    if [[ "$restart_services" == "yes" ]]; then
+        echo "Starting services $story_service_name and $geth_service_name..."
+        sudo systemctl start $story_service_name
+        sudo systemctl start $geth_service_name
+        echo -e "${GREEN}Snapshot download and service restart completed!${NC}"
+    else
+        echo -e "${GREEN}Snapshot download completed. You can now manually start your services.${NC}"
+    fi
+else
+    echo -e "${GREEN}Snapshot download completed. You can now start your services.${NC}"
 fi
-
-echo -e "${GREEN}Snapshot download and service restart completed!${NC}"
