@@ -9,22 +9,19 @@ echo -e "${GREEN}Welcome to the Story Protocol Snapshot Downloader!${NC}"
 
 # Check if the user is root and set directory paths accordingly
 if [ "$EUID" -eq 0 ]; then
-    echo "You are running this script as root."
     DAEMON_HOME="/root/.story/story"
     GETH_HOME="/root/.story/geth/iliad/geth"
 else
     USER_NAME=$(whoami)
-    echo "You are running this script as user: $USER_NAME"
     DAEMON_HOME="/home/$USER_NAME/.story/story"
     GETH_HOME="/home/$USER_NAME/.story/geth/iliad/geth"
 fi
 
 # Ask if the user wants to stop the services
-echo -e "${GREEN}Do you want to stop your Story and Geth services before downloading the snapshot?${NC}"
-read -p "Answer yes to stop the services or no if they are already stopped: " stop_services
+read -p "Do you want to stop the services before downloading the snapshot? Answer yes to stop the services or no if they are already stopped (yes/no): " stop_services
 
-# Define service names if stopping services
 if [[ "$stop_services" == "yes" ]]; then
+    # Define service names
     echo -e "${GREEN}By default, the services are named 'story' and 'geth'.${NC}"
     echo "If this is correct, press Enter. Otherwise, please input your custom service names."
 
@@ -82,13 +79,13 @@ fi
 echo "Restoring priv_validator_state.json..."
 mv $DAEMON_HOME/priv_validator_state.json.backup $DAEMON_HOME/data/priv_validator_state.json
 
-# Start the services if they were stopped earlier
+# Start services if they were stopped at the beginning
 if [[ "$stop_services" == "yes" ]]; then
     echo "Starting services $story_service_name and $geth_service_name..."
     sudo systemctl start $story_service_name
     sudo systemctl start $geth_service_name
 else
-    echo -e "${GREEN}Snapshots downloaded! Please start your services manually when ready.${NC}"
+    echo -e "${GREEN}Snapshots downloaded. Please remember to start your services manually.${NC}"
 fi
 
-echo -e "${GREEN}Snapshot download and service handling completed!${NC}"
+echo -e "${GREEN}Snapshot download and service restart completed!${NC}"
