@@ -68,12 +68,9 @@ if [[ "$install_firewall" == "yes" ]]; then
     sudo ufw enable
 fi
 
-wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/geth-public/geth-linux-amd64-0.9.3-b224fdf.tar.gz
-sudo tar -xvf geth-linux-amd64-0.9.3-b224fdf.tar.gz
-sudo chmod +x $HOME/geth-linux-amd64-0.9.3-b224fdf/geth
-sudo mv $HOME/geth-linux-amd64-0.9.3-b224fdf/geth /usr/bin/
-sudo rm geth-linux-amd64-0.9.3-b224fdf.tar.gz
-sudo rm -rf $HOME/geth-linux-amd64-0.9.3-b224fdf/
+wget -O geth https://github.com/piplabs/story-geth/releases/download/v0.9.4/geth-linux-amd64
+sudo chmod +x $HOME/geth
+sudo mv $HOME/geth /usr/bin/
 
 wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-linux-amd64-0.11.0-aac4bfe.tar.gz
 sudo tar -xvf story-linux-amd64-0.11.0-aac4bfe.tar.gz
