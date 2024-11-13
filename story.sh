@@ -79,7 +79,7 @@ sudo mv $HOME/story /usr/bin/
 echo -e "${GREEN}"
 read -p "Please enter your node moniker: " NODE_MONIKER
 echo -e "${NC}"
-story init --network iliad --moniker ${NODE_MONIKER}
+story init --network odyssey --moniker ${NODE_MONIKER}
 
 echo -e "${GREEN}"
 read -p "Do you want to install Cosmovisor for automatic upgrades? (yes/no): " install_cosmovisor
