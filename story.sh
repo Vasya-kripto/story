@@ -178,7 +178,7 @@ EOF"
 sudo apt install curl jq lz4 unzip -y
 curl https://server-1.itrocket.net/testnet/story/story_2024-11-13_522159_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/story
 mkdir -p $HOME/.story/geth/iliad/geth/
-curl https://server-1.itrocket.net/testnet/story/geth_story_2024-11-13_522159_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/geth/iliad/geth
+curl https://server-1.itrocket.net/testnet/story/geth_story_2024-11-13_522159_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/geth/odyssey/geth
 
 wget -O $HOME/.story/story/config/genesis.json https://server-3.itrocket.net/testnet/story/genesis.json
 wget -O $HOME/.story/story/config/addrbook.json https://server-3.itrocket.net/testnet/story/addrbook.json
