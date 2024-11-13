@@ -68,16 +68,13 @@ if [[ "$install_firewall" == "yes" ]]; then
     sudo ufw enable
 fi
 
-wget -O geth https://github.com/piplabs/story-geth/releases/download/v0.9.4/geth-linux-amd64
+wget -O geth https://github.com/piplabs/story-geth/releases/download/v0.10.0/geth-linux-amd64
 sudo chmod +x $HOME/geth
 sudo mv $HOME/geth /usr/bin/
 
-wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-linux-amd64-0.11.0-aac4bfe.tar.gz
-sudo tar -xvf story-linux-amd64-0.11.0-aac4bfe.tar.gz
-sudo chmod +x $HOME/story-linux-amd64-0.11.0-aac4bfe/story
-sudo mv $HOME/story-linux-amd64-0.11.0-aac4bfe/story /usr/bin/
-sudo rm story-linux-amd64-0.11.0-aac4bfe.tar.gz
-sudo rm -rf $HOME/story-linux-amd64-0.11.0-aac4bfe/
+wget -O story https://github.com/piplabs/story/releases/download/v0.12.1/story-linux-amd64
+sudo chmod +x $HOME/story
+sudo mv $HOME/story /usr/bin/
 
 echo -e "${GREEN}"
 read -p "Please enter your node moniker: " NODE_MONIKER
@@ -94,8 +91,8 @@ if [[ "$install_cosmovisor" == "yes" ]]; then
     mkdir -p ${HOME}/.story/story/cosmovisor/upgrades/ && sudo touch ${HOME}/.story/story/cosmovisor/upgrades/upgrade-info.json
     cp $(which story) ${HOME}/.story/story/cosmovisor/genesis/bin/
     ln -s -T ${HOME}/.story/story/cosmovisor/genesis ${HOME}/.story/story/cosmovisor/current
-    mkdir -p ${HOME}/.story/story/cosmovisor/upgrades/v0.11.0/bin/
-    cp $(which story) ${HOME}/.story/story/cosmovisor/upgrades/v0.11.0/bin/
+    mkdir -p ${HOME}/.story/story/cosmovisor/upgrades/v0.12.1/bin/
+    cp $(which story) ${HOME}/.story/story/cosmovisor/upgrades/v0.12.1/bin/
 
     echo "export PATH=\$PATH:$HOME/go/bin" >> ~/.profile
     source ~/.profile
@@ -179,12 +176,12 @@ WantedBy=multi-user.target
 EOF"
 
 sudo apt install curl jq lz4 unzip -y
-curl http://46.4.114.99/story_snapshot_pruned.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/story
+curl https://server-1.itrocket.net/testnet/story/story_2024-11-13_522159_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/story
 mkdir -p $HOME/.story/geth/iliad/geth/
-curl http://46.4.114.99/geth_snapshot.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/geth/iliad/geth
+curl https://server-1.itrocket.net/testnet/story/geth_story_2024-11-13_522159_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/geth/iliad/geth
 
-wget -O $HOME/.story/story/config/genesis.json http://46.4.114.99/genesis.json
-wget -O $HOME/.story/story/config/addrbook.json http://46.4.114.99/addrbook.json
+wget -O $HOME/.story/story/config/genesis.json https://server-3.itrocket.net/testnet/story/genesis.json
+wget -O $HOME/.story/story/config/addrbook.json https://server-3.itrocket.net/testnet/story/addrbook.json
 
 sudo systemctl daemon-reload
 sudo systemctl enable story.service
